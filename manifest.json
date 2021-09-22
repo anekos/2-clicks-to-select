@@ -1,13 +1,14 @@
 {
   "manifest_version": 2,
   "version": "0.0.1",
-  "short_name": "react-chrome-extemsion",
-  "name": "sample",
-  "description": "sample",
+  "short_name": "2c2s",
+  "name": "2 clicks to select",
+  "description": "Click a word twice to select text",
   "content_scripts": [
     {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["main.js"]
+      "matches": ["<all_urls>"],
+      "js": ["main.js"],
+      "all_frames": true
     }
   ],
   "background": {
