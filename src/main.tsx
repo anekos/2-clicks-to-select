@@ -106,7 +106,7 @@ interface IConfig {
   // https://www.npmjs.com/package/@extend-chrome/storage
   // https://www.npmjs.com/package/browser-extension-url-match
 
-  const whitelist = (await Config.get({whitelist: []})).whitelist
+  const whitelist = (await Config.get({whitelist: ['*://*/*']})).whitelist
 
   const url = document.location.href
 
