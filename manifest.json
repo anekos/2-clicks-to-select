@@ -28,5 +28,19 @@
   "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
   "permissions": [
     "storage"
-  ]
+  ],
+  "icons": {
+    "48": "icon/kuri.48x48.png",
+    "64": "icon/kuri.64x64.png",
+    "48": "icon/kuri.48x48.png",
+    "64": "icon/kuri.64x64.png",
+    "72": "icon/kuri.72x72.png",
+    "96": "icon/kuri.96x96.png",
+    "128": "icon/kuri.128x128.png",
+    "144": "icon/kuri.144x144.png",
+    "152": "icon/kuri.152x152.png",
+    "192": "icon/kuri.192x192.png",
+    "384": "icon/kuri.384x384.png",
+    "512": "icon/kuri.512x512.png"
+  }
 }
