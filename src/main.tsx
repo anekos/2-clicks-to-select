@@ -1,3 +1,9 @@
+import { matchPatternWithConfig, presets } from 'browser-extension-url-match'
+import Config from './config'
+
+
+const matchPattern = matchPatternWithConfig(presets.firefox)
+
 function isWord(c: string): boolean {
   return c.match(/\w/) !== null
 }
@@ -11,10 +17,6 @@ interface ClickedWord {
 }
 
 function getClickedWord(e: any): ClickedWord | null{
-  try {
-  if (!(document as any).caretPositionFromPoint)
-    return null
-
   let range = (document as any).caretPositionFromPoint(e.clientX, e.clientY)
   if (range === null)
     return null
@@ -45,10 +47,6 @@ function getClickedWord(e: any): ClickedWord | null{
   let word = text.slice(left, right)
 
   return {left, offset, right, word, node}
-  } catch (e) {
-    console.log(e)
-    throw e
-  }
 }
 
 const select = (() => {
@@ -80,14 +78,44 @@ const select = (() => {
   }
 })()
 
+function install(): void {
+  if (!(document as any).caretPositionFromPoint) {
+    console.error('`caretPositionFromPoint` is not found')
+    return null
+  }
 
-document.body.addEventListener(
-  'click',
-  (e: any) => {
-    const c = getClickedWord(e)
-    if (!c)
-      return
-    select(c)
-  },
-  false
-)
+  document.body.addEventListener(
+    'click',
+    (e: any) => {
+      console.log('2c2s', 'click')
+      const c = getClickedWord(e)
+      if (!c)
+        return
+      select(c)
+    },
+    false
+  )
+  console.log('2c2s', 'Installed')
+}
+
+interface IConfig {
+  whitelist: string[]
+}
+
+(async () => {
+  // https://www.npmjs.com/package/@extend-chrome/storage
+  // https://www.npmjs.com/package/browser-extension-url-match
+
+  const whitelist = (await Config.get({whitelist: []})).whitelist
+
+  const url = document.location.href
+
+  const matched = whitelist.some(it => {
+    const matcher = matchPattern(it)
+    return matcher.match(url)
+  })
+
+  if (matched)
+    install()
+
+})()

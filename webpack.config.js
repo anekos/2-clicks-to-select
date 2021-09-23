@@ -6,6 +6,7 @@ module.exports = {
   entry: {
     main: './src/main.tsx',
     background: './src/background.js',
+    options: './src/options.tsx',
   },
   output: {
     path: __dirname + '/dist',
@@ -35,6 +36,10 @@ module.exports = {
         {
           from: './manifest.json',
           to: 'manifest.json',
+        },
+        {
+          from: './src/options.html',
+          to: 'options.html',
         },
       ],
     }),
