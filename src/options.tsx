@@ -32,10 +32,11 @@ function PatternsEditor({whitelist}: IPatternsEditor) {
 
 function Options(config: IConfig) {
   const [timeout, setTimeout] = useState<number>(config.timeout)
+  const [clipboard, setClipboard] = useState<boolean>(config.clipboard)
 
-  function onBlur() {
-    Config.set({timeout})
-  }
+  useEffect(() => {
+    Config.set({timeout, clipboard})
+  }, [timeout, clipboard])
 
   return (
     <>
@@ -47,8 +48,22 @@ function Options(config: IConfig) {
 
       <h2>Misc</h2>
 
-      <label>Timeout (msec)</label>
-      <input type="number" value={timeout} onChange={(e: ChangeEvent<HTMLInputElement>) => setTimeout(parseInt(e.target.value))} onBlur={onBlur}/>
+      <p>
+        <label>Timeout</label>
+        &nbsp;
+        <input type="number" value={timeout} onChange={(e: ChangeEvent<HTMLInputElement>) => setTimeout(parseInt(e.target.value))} />
+        <label> (msec)</label>
+      </p>
+
+      <p>
+        <input
+          id="clipboard"
+          type="checkbox"
+          checked={clipboard}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => { setClipboard(e.target.checked) }}
+        />
+        <label htmlFor="clipboard">Copy to clipboard</label>
+      </p>
     </>
   )
 }

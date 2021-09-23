@@ -89,6 +89,8 @@ const select = (() => {
       return
     selection.removeAllRanges()
     selection.addRange(range)
+    if (config.clipboard)
+      document.execCommand('copy')
   }
 })()
 
