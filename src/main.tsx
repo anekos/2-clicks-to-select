@@ -1,5 +1,5 @@
 import { matchPatternWithConfig, presets } from 'browser-extension-url-match'
-import Config from './config'
+import {Config} from './config'
 
 
 const matchPattern = matchPatternWithConfig(presets.firefox)

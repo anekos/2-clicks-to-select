@@ -1,8 +1,14 @@
 import { getBucket } from '@extend-chrome/storage'
 
-interface IConfig {
+export interface IConfig {
   whitelist: string[]
+  clipboard: boolean
+  timeout: number
 }
-const Config = getBucket<IConfig>('config', 'sync')
+export const Config = getBucket<IConfig>('config', 'sync')
 
-export default Config
+export const Defaults: IConfig = {
+  whitelist: ['*://*'],
+  clipboard: false,
+  timeout: 1000
+}

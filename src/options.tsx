@@ -1,13 +1,14 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 
-import Config from './config'
+import {Config, Defaults, IConfig} from './config'
 
 
 interface IPatternsEditor {
+  whitelist: string[]
 }
-function PatternsEditor({}: IPatternsEditor) {
-  const [value, setValue] = useState<string|null>(null)
+function PatternsEditor({whitelist}: IPatternsEditor) {
+  const [value, setValue] = useState<string>(whitelist.join('\n'))
 
   function _onChange(e: ChangeEvent<HTMLTextAreaElement>) {
     console.log(e.target.value.split('\n'))
@@ -19,18 +20,15 @@ function PatternsEditor({}: IPatternsEditor) {
   }
 
   useEffect(() => {
-    Config.get({whitelist: []}).then(({whitelist}) => {
+    Config.get(Defaults).then(({whitelist}) => {
       setValue(whitelist.join('\n'))
     })
   }, [])
 
-  if (value === null)
-    return (<>Loading</>)
-
   return (
     <textarea
       value={value}
-      cols={100}
+      cols={50}
       rows={10}
       onChange={_onChange}
       onBlur={onBlur}
@@ -38,7 +36,12 @@ function PatternsEditor({}: IPatternsEditor) {
 }
 
 
-function Options({}) {
+function Options(config: IConfig) {
+  const [timeout, setTimeout] = useState<number>(config.timeout)
+
+  function onBlur() {
+    Config.set({timeout})
+  }
 
   return (
     <>
@@ -46,10 +49,26 @@ function Options({}) {
 
       <h2>White list</h2>
       <p>e.g. `https://example.com/*`</p>
-      <PatternsEditor />
+      <PatternsEditor whitelist={config.whitelist} />
+
+      <h2>Misc</h2>
+
+      <label>Timeout (msec)</label>
+      <input type="number" value={timeout} onChange={(e: ChangeEvent<HTMLInputElement>) => setTimeout(parseInt(e.target.value))} onBlur={onBlur}/>
     </>
   )
 }
 
+function Main() {
+  const [config, setConfig] = useState<null|IConfig>(null)
+
+  useEffect(() => { Config.get(Defaults).then(setConfig) }, [])
+
+  if (config === null)
+    return (<>Loading</>)
+
+  return (<Options {...config} />)
+}
+
 const domContainer = document.querySelector('#app')
-ReactDOM.render(<Options />, domContainer)
+ReactDOM.render(<Main />, domContainer)
