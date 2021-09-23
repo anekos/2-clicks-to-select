@@ -53,12 +53,16 @@ jq --arg version "$next_version" '.version = $version' < "$PACKAGE" | sponge "$P
 
 npm run build
 
+pushd dist
+zip -r ../2c2s.zip -- *.* *
+popd
+
 # }}}
 
 # Git {{{
 
 git commit -m 'version++' "$MANIFEST" "$PACKAGE"
-git archive --format=zip HEAD >| copyf.src.zip
+git archive --format=zip HEAD >| 2c2s.src.zip
 git tag "v$next_version"
 git push --tags
 
