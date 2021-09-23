@@ -12,8 +12,12 @@
   "description": "Click a word twice to select text",
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["main.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "main.js"
+      ],
       "all_frames": true
     }
   ],
@@ -30,8 +34,6 @@
     "storage"
   ],
   "icons": {
-    "48": "icon/kuri.48x48.png",
-    "64": "icon/kuri.64x64.png",
     "48": "icon/kuri.48x48.png",
     "64": "icon/kuri.64x64.png",
     "72": "icon/kuri.72x72.png",
