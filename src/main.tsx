@@ -1,11 +1,17 @@
 import { matchPatternWithConfig, presets } from 'browser-extension-url-match'
-import {Config} from './config'
+
+import {Config, Defaults, IConfig} from './config'
 
 
 const matchPattern = matchPatternWithConfig(presets.firefox)
 
 function isWord(c: string): boolean {
   return c.match(/\w/) !== null
+}
+
+interface Previous {
+  at: number
+  clicked: ClickedWord
 }
 
 interface ClickedWord {
@@ -50,22 +56,30 @@ function getClickedWord(e: any): ClickedWord | null{
 }
 
 const select = (() => {
-  let prev: ClickedWord | null = null
+  let prev: Previous | null = null
 
-  return (c: ClickedWord) => {
+  return (c: ClickedWord, config: IConfig) => {
     let range = document.createRange()
 
+    const at = new Date().getTime()
+
+    if (prev !== null) {
+      let delta = at - prev.at
+      if (config.timeout < delta)
+        prev = null
+    }
+
     if (prev === null) {
-      prev = c
+      prev = {clicked: c, at}
       return
     }
 
-    range.setStart(prev.node, prev.left)
+    range.setStart(prev.clicked.node, prev.clicked.left)
     range.setEnd(c.node, c.right)
 
     if (range.startContainer === range.endContainer && range.startOffset === range.endOffset) {
       range.setStart(c.node, c.left)
-      range.setEnd(prev.node, prev.right)
+      range.setEnd(prev.clicked.node, prev.clicked.right)
     }
 
     prev = null
@@ -78,7 +92,7 @@ const select = (() => {
   }
 })()
 
-function install(): void {
+function install(config: IConfig): void {
   if (!(document as any).caretPositionFromPoint) {
     console.error('`caretPositionFromPoint` is not found')
     return null
@@ -91,31 +105,27 @@ function install(): void {
       const c = getClickedWord(e)
       if (!c)
         return
-      select(c)
+      select(c, config)
     },
     false
   )
   console.log('2c2s', 'Installed')
 }
 
-interface IConfig {
-  whitelist: string[]
-}
-
 (async () => {
   // https://www.npmjs.com/package/@extend-chrome/storage
   // https://www.npmjs.com/package/browser-extension-url-match
 
-  const whitelist = (await Config.get({whitelist: ['*://*/*']})).whitelist
+  const config = (await Config.get(Defaults))
 
   const url = document.location.href
 
-  const matched = whitelist.some(it => {
+  const matched = config.whitelist.some(it => {
     const matcher = matchPattern(it)
     return matcher.match(url)
   })
 
   if (matched)
-    install()
+    install(config)
 
 })()
