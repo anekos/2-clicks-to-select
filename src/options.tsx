@@ -19,12 +19,6 @@ function PatternsEditor({whitelist}: IPatternsEditor) {
     Config.set({whitelist: value.split('\n')})
   }
 
-  useEffect(() => {
-    Config.get(Defaults).then(({whitelist}) => {
-      setValue(whitelist.join('\n'))
-    })
-  }, [])
-
   return (
     <textarea
       value={value}
