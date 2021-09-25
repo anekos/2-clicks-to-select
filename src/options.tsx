@@ -77,7 +77,7 @@ function Options(config: IConfig) {
       </p>
 
       <p>
-        <label>Word is </label>
+        <label>`Word` is </label>
         &nbsp;
         <input type="text" value={wordPattern} onChange={(e: ChangeEvent<HTMLInputElement>) => setWordPattern(e.target.value)} />
         <label> (Regular expression)</label>
