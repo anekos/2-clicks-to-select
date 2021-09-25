@@ -1,8 +1,10 @@
 import { matchPatternWithConfig, presets } from 'browser-extension-url-match'
 
 import {Config, Defaults, IConfig} from './config'
+import { searchWord } from './search-word'
 
 const matchPattern = matchPatternWithConfig(presets.firefox)
+
 let config = Defaults
 let tryedToInstall = false
 
@@ -37,29 +39,12 @@ function getClickedWord(e: any): ClickedWord | null{
   let node = range.offsetNode
   let offset = range.offset
   let text = node.textContent
-  let left = 0
-  let right = text.length - 1
 
-  if (offset === text.length)
-    offset = text.length - 1
+  let found = searchWord(text, offset)
+  if (found === null)
+    return null
 
-  if (!isWord(text[offset])) {
-    if (0 < offset) {
-      offset--
-    } else if (offset < text.length - 1) {
-      offset++
-    }
-  }
-
-  for (let p = offset; 0 <= p && isWord(text[p]); p--)
-    left = p
-
-  for (let p = offset; p < text.length && isWord(text[p]); p++)
-    right = p + 1
-
-  let word = text.slice(left, right)
-
-  return {left, offset, right, word, node}
+  return Object.assign(found, {offset, node})
 }
 
 const select = (() => {
@@ -82,11 +67,11 @@ const select = (() => {
     }
 
     range.setStart(prev.clicked.node, prev.clicked.left)
-    range.setEnd(c.node, c.right)
+    range.setEnd(c.node, c.right + 1)
 
     if (range.startContainer === range.endContainer && range.startOffset === range.endOffset) {
       range.setStart(c.node, c.left)
-      range.setEnd(prev.clicked.node, prev.clicked.right)
+      range.setEnd(prev.clicked.node, prev.clicked.right + 1)
     }
 
     prev = null

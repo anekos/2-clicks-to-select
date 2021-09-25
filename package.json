@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@types/chrome": "^0.0.158",
+    "@types/jest": "^27.0.2",
     "@types/react": "^17.0.8",
     "@types/react-dom": "^17.0.5",
     "@typescript-eslint/eslint-plugin": "^4.25.0",
@@ -19,7 +20,9 @@
     "eslint-config-prettier": "^8.3.0",
     "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-react": "^7.24.0",
+    "jest": "^27.2.2",
     "prettier": "^2.3.0",
+    "ts-jest": "^27.0.5",
     "ts-loader": "^9.2.2",
     "typescript": "^4.3.2",
     "webpack": "^5.38.1",
@@ -31,5 +34,17 @@
     "crx-hotreload": "^1.0.6",
     "react": "^17.0.2",
     "react-dom": "^17.0.2"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "transform": {
+      "^.+\\.ts$": "ts-jest"
+    },
+    "testMatch": [
+      "**/*.test.ts"
+    ]
   }
 }
