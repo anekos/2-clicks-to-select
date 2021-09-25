@@ -1,7 +1,4 @@
 
-const wordPattern = /[-_.,\w]+/
-
-
 export interface Found {
   word: string
   left: number
@@ -9,12 +6,12 @@ export interface Found {
 }
 
 
-export function searchWord(s: string, offset: number): Found | null {
+export function searchWord(s: string, offset: number, pattern: RegExp): Found | null {
   let rest = s
   let base = 0
 
   while (0 < rest.length) {
-    let m = rest.match(wordPattern)
+    let m = rest.match(pattern)
     if (m === null)
       return null
 

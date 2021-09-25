@@ -42,11 +42,12 @@ function PatternsEditor({whitelist}: IPatternsEditor) {
 function Options(config: IConfig) {
   const [timeout, setTimeout] = useState<number>(config.timeout)
   const [clipboard, setClipboard] = useState<boolean>(config.clipboard)
+  const [wordPattern, setWordPattern] = useState<string>(config.wordPattern)
 
   useEffect(() => {
-    Config.set({timeout, clipboard})
+    Config.set({timeout, clipboard, wordPattern})
     updateTabs()
-  }, [timeout, clipboard])
+  }, [timeout, clipboard, wordPattern])
 
   return (
     <>
@@ -74,6 +75,14 @@ function Options(config: IConfig) {
         />
         <label htmlFor="clipboard">Copy to clipboard</label>
       </p>
+
+      <p>
+        <label>Word is </label>
+        &nbsp;
+        <input type="text" value={wordPattern} onChange={(e: ChangeEvent<HTMLInputElement>) => setWordPattern(e.target.value)} />
+        <label> (Regular expression)</label>
+      </p>
+
     </>
   )
 }

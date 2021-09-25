@@ -36,11 +36,13 @@ function getClickedWord(e: any): ClickedWord | null{
   if (range === null)
     return null
 
+  let pattern = new RegExp(config.wordPattern, 'i')
+
   let node = range.offsetNode
   let offset = range.offset
   let text = node.textContent
 
-  let found = searchWord(text, offset)
+  let found = searchWord(text, offset, pattern)
   if (found === null)
     return null
 
