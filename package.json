@@ -9,6 +9,7 @@
     "lint": "eslint src/** --ext .ts,.tsx"
   },
   "devDependencies": {
+    "@types/chrome": "^0.0.158",
     "@types/react": "^17.0.8",
     "@types/react-dom": "^17.0.5",
     "@typescript-eslint/eslint-plugin": "^4.25.0",

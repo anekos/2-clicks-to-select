@@ -2,8 +2,15 @@ import { matchPatternWithConfig, presets } from 'browser-extension-url-match'
 
 import {Config, Defaults, IConfig} from './config'
 
-
 const matchPattern = matchPatternWithConfig(presets.firefox)
+let config = Defaults
+let tryedToInstall = false
+
+
+async function updateConfig() {
+  config = await Config.get(Defaults)
+  console.log('Config updated', config)
+}
 
 function isWord(c: string): boolean {
   return c.match(/\w/) !== null
@@ -58,7 +65,7 @@ function getClickedWord(e: any): ClickedWord | null{
 const select = (() => {
   let prev: Previous | null = null
 
-  return (c: ClickedWord, config: IConfig) => {
+  return (c: ClickedWord) => {
     let range = document.createRange()
 
     const at = new Date().getTime()
@@ -94,7 +101,7 @@ const select = (() => {
   }
 })()
 
-function install(config: IConfig): void {
+function install(): void {
   if (!(document as any).caretPositionFromPoint) {
     console.error('`caretPositionFromPoint` is not found')
     return null
@@ -103,22 +110,22 @@ function install(config: IConfig): void {
   document.body.addEventListener(
     'click',
     (e: any) => {
-      console.log('2c2s', 'click')
       const c = getClickedWord(e)
       if (!c)
         return
-      select(c, config)
+      select(c)
     },
     false
   )
+
   console.log('2c2s', 'Installed')
 }
 
-(async () => {
-  // https://www.npmjs.com/package/@extend-chrome/storage
-  // https://www.npmjs.com/package/browser-extension-url-match
+async function tryToInstall() {
+  if (tryedToInstall)
+    return true
 
-  const config = (await Config.get(Defaults))
+  tryedToInstall = true
 
   const url = document.location.href
 
@@ -128,6 +135,18 @@ function install(config: IConfig): void {
   })
 
   if (matched)
-    install(config)
+    install()
+}
 
+(async () => {
+  // https://www.npmjs.com/package/@extend-chrome/storage
+  // https://www.npmjs.com/package/browser-extension-url-match
+  chrome.runtime.onMessage.addListener((message: string, sender: any, callback: any) => {
+    updateConfig()
+    return Promise.resolve({response: 'ok'})
+  })
+
+  await updateConfig()
+
+  tryToInstall()
 })()

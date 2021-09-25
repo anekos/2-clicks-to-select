@@ -4,6 +4,14 @@ import ReactDOM from 'react-dom'
 import {Config, Defaults, IConfig} from './config'
 
 
+function updateTabs() {
+  chrome.tabs.query({}, (tabs: any) => {
+    tabs.forEach((tab: any) => {
+      chrome.tabs.sendMessage(tab.id, {command: 'update-config'})
+    })
+  })
+}
+
 interface IPatternsEditor {
   whitelist: string[]
 }
@@ -17,6 +25,7 @@ function PatternsEditor({whitelist}: IPatternsEditor) {
 
   function onBlur() {
     Config.set({whitelist: value.split('\n')})
+    updateTabs()
   }
 
   return (
@@ -36,6 +45,7 @@ function Options(config: IConfig) {
 
   useEffect(() => {
     Config.set({timeout, clipboard})
+    updateTabs()
   }, [timeout, clipboard])
 
   return (
