@@ -8,7 +8,7 @@ export interface IConfig {
 export const Config = getBucket<IConfig>('config', 'sync')
 
 export const Defaults: IConfig = {
-  whitelist: ['*://*'],
+  whitelist: ['*://*/*'],
   clipboard: false,
   timeout: 1000
 }
