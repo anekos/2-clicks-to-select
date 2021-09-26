@@ -34,8 +34,8 @@ module.exports = {
     new CopyPlugin({
       patterns: [
         {
-          from: './manifest.json',
-          to: 'manifest.json',
+          from: process.env.NODE_ENV === 'development' ? './manifest.dev.json' : './manifest.json',
+          to: 'manifest.json'
         },
         {
           from: './icon/*.*',

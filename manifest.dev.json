@@ -1,0 +1,48 @@
+{
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "2c2s@snca.net",
+      "strict_min_version": "42.0"
+    }
+  },
+  "manifest_version": 2,
+  "version": "0.0.3",
+  "short_name": "2c2s",
+  "name": "2 clicks to select",
+  "description": "Click a word twice to select text",
+  "content_scripts": [
+    {
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "main.js"
+      ],
+      "all_frames": true
+    }
+  ],
+  "background": {
+    "scripts": [
+      "background.js"
+    ]
+  },
+  "options_ui": {
+    "page": "options.html"
+  },
+  "permissions": [
+    "storage"
+  ],
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self';",
+  "icons": {
+    "48": "icon/kuri.48x48.png",
+    "64": "icon/kuri.64x64.png",
+    "72": "icon/kuri.72x72.png",
+    "96": "icon/kuri.96x96.png",
+    "128": "icon/kuri.128x128.png",
+    "144": "icon/kuri.144x144.png",
+    "152": "icon/kuri.152x152.png",
+    "192": "icon/kuri.192x192.png",
+    "384": "icon/kuri.384x384.png",
+    "512": "icon/kuri.512x512.png"
+  }
+}
