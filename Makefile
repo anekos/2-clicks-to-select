@@ -20,3 +20,7 @@ icon:
 	convert -resize 192x192 ./icon/kuri.svg ./icon/kuri.192x192.png
 	convert -resize 384x384 ./icon/kuri.svg ./icon/kuri.384x384.png
 	convert -resize 512x512 ./icon/kuri.svg ./icon/kuri.512x512.png
+
+.PHONY: release
+release:
+	./script/release
