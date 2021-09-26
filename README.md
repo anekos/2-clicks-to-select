@@ -2,5 +2,10 @@
 
 Click a word twice to select text
 
+## Usage
+
 ![click](screenshot/click.png)
-![selected](screenshot/selected.png)
+
+## Options
+
+![options](screenshot/options.png)
