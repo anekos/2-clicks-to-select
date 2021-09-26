@@ -6,7 +6,7 @@
     }
   },
   "manifest_version": 2,
-  "version": "0.0.3",
+  "version": "0.1.0",
   "short_name": "2c2s",
   "name": "2 clicks to select",
   "description": "Click a word twice to select text",
