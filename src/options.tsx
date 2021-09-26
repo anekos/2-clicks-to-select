@@ -31,11 +31,22 @@ function PatternsEditor({whitelist}: IPatternsEditor) {
   return (
     <textarea
       value={value}
-      cols={50}
+      style={{width: '100%'}}
       rows={10}
       onChange={_onChange}
       onBlur={onBlur}
     />)
+}
+
+interface IField {
+  title: string
+  children: React.ReactNode
+}
+function Field({title, children}: IField) {
+  return (<>
+    <h2>{title}</h2>
+    { children }
+  </>)
 }
 
 
@@ -53,20 +64,20 @@ function Options(config: IConfig) {
     <>
       <h1>2s2c Options</h1>
 
-      <h2>White list</h2>
-      <p>e.g. `https://example.com/*`</p>
-      <PatternsEditor whitelist={config.whitelist} />
+      <Field title="White list">
+        <p>e.g. `https://example.com/*`</p>
+        <PatternsEditor whitelist={config.whitelist} />
+      </Field>
 
-      <h2>Misc</h2>
-
-      <p>
-        <label>Timeout</label>
-        &nbsp;
-        <input type="number" value={timeout} onChange={(e: ChangeEvent<HTMLInputElement>) => setTimeout(parseInt(e.target.value))} />
+      <Field title="Timeout">
+        <input
+          type="number"
+          value={timeout}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setTimeout(parseInt(e.target.value))} />
         <label> (msec)</label>
-      </p>
+      </Field>
 
-      <p>
+      <Field title="Clipboard">
         <input
           id="clipboard"
           type="checkbox"
@@ -74,14 +85,19 @@ function Options(config: IConfig) {
           onChange={(e: ChangeEvent<HTMLInputElement>) => { setClipboard(e.target.checked) }}
         />
         <label htmlFor="clipboard">Copy to clipboard</label>
-      </p>
+      </Field>
 
-      <p>
+      <Field title="Word definition">
         <label>`Word` is </label>
-        &nbsp;
-        <input type="text" value={wordPattern} onChange={(e: ChangeEvent<HTMLInputElement>) => setWordPattern(e.target.value)} />
-        <label> (Regular expression)</label>
-      </p>
+        <p>
+          <input
+            type="text"
+            value={wordPattern}
+            style={{width: '100%'}}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => setWordPattern(e.target.value)} />
+        </p>
+        <em>(<a href="https://regexr.com/" target="_blank">Regular expression</a>)</em>
+      </Field>
 
     </>
   )
