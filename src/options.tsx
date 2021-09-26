@@ -88,7 +88,6 @@ function Options(config: IConfig) {
       </Field>
 
       <Field title="Word definition">
-        <label>`Word` is </label>
         <p>
           <input
             type="text"
